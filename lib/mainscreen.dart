@@ -1,8 +1,10 @@
 import 'dart:ui';
 import 'package:buszmix/guesses_widget.dart';
 import 'package:buszmix/mix_input.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MainScreen extends StatefulWidget {
@@ -90,128 +92,132 @@ class _MainScreenState extends State<MainScreen>{
           children: [
             Column(
               mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.stretch,
+              verticalDirection: VerticalDirection.up,
               children: [
-                SingleChildScrollView(
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const Center(
-                        child: Padding(
-                          padding: EdgeInsets.all(20),
-                          child: Text(
-                            'Tipped meg mizu lesz!',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 32,
-                              fontWeight: FontWeight.w900
-                            ),
-                          ),
-                        ),
-                      ),
-                      GuessesWidget(guessEnters: guessEnters, guessLeaves: guessLeaves, enterSelected: enterSelected, leaveSelected: leaveSelected, switchSelectionCallback: (press){
-                        if(press == 1 && enterSelected){
-                          return;
-                        }
-                        else if(press == 2 && leaveSelected){
-                          return;
-                        }
+                GuessInputField(callback: (button){
+                  if(button == -1){
+                    setState(() {
+                      changeSelectedString('0');
+                      changeSelected(0);
+                    });
+                    return;
+                  }
+                  else if(button == -2){
+                    setState(() {
+                      if(getSelectedString().length == 1){
+                        changeSelectedString('0');
+                        changeSelected(0);
+                        return;
+                      }
+                      changeSelectedString(getSelectedString().substring(0, getSelectedString().length - 1));
+                      setState(() {
+                        changeSelected(int.parse(getSelectedString()));
+                      });
+                    });
+                    return;
+                  }
 
-                        setState(() {
-                          enterSelected = !enterSelected;
-                          leaveSelected = !leaveSelected;
-                        });
-                      }),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 15),
-                        child: FilledButton(
-                          onPressed: (){
-                            doGuess();
-                          },
-                          style: ButtonStyle(
-                            foregroundColor: MaterialStateProperty.all(Colors.white),
-                            backgroundColor: MaterialStateProperty.all(Colors.green.withOpacity(.5))
+                  changeSelectedStringAdd('$button');
+                  setState(() {
+                    changeSelected(int.parse(getSelectedString()));
+                  });
+                }),
+                Expanded(
+                  flex: 1,
+                  child: SingleChildScrollView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const Center(
+                          child: Padding(
+                            padding: EdgeInsets.all(20),
+                            child: Text(
+                              'Tipped meg mizu lesz!',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 32,
+                                fontWeight: FontWeight.w900
+                              ),
+                            ),
                           ),
-                          child: Container(
-                            padding: const EdgeInsets.all(20),
-                            decoration: const BoxDecoration(
-                              borderRadius: BorderRadius.all(Radius.circular(20))
-                            ),
-                            child: const Row(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.done_rounded,
-                                  size: 32,
-                                ),
-                                SizedBox(width: 5),
-                                Text(
-                                  'Tipp',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w700
-                                  ),
-                                )
-                              ],
-                            ),
-                          )
                         ),
-                      ),
-                      Visibility(
-                        visible: guessStreak > 0,
-                        child: Padding(
+                        GuessesWidget(guessEnters: guessEnters, guessLeaves: guessLeaves, enterSelected: enterSelected, leaveSelected: leaveSelected, switchSelectionCallback: (press){
+                          if(press == 1 && enterSelected){
+                            return;
+                          }
+                          else if(press == 2 && leaveSelected){
+                            return;
+                          }
+                  
+                          setState(() {
+                            enterSelected = !enterSelected;
+                            leaveSelected = !leaveSelected;
+                          });
+                        }),
+                        Padding(
                           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 15),
-                          child: Text(
-                            'Tipp streak: $guessStreak',
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              color: Colors.orangeAccent,
-                              fontSize: 22,
-                              fontWeight: FontWeight.w800
+                          child: FilledButton(
+                            onPressed: (){
+                              doGuess();
+                            },
+                            style: ButtonStyle(
+                              foregroundColor: MaterialStateProperty.all(Colors.white),
+                              backgroundColor: MaterialStateProperty.all(Colors.green.withOpacity(.5))
                             ),
+                            child: Container(
+                              padding: const EdgeInsets.all(20),
+                              decoration: const BoxDecoration(
+                                borderRadius: BorderRadius.all(Radius.circular(20))
+                              ),
+                              child: const Row(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.done_rounded,
+                                    size: 32,
+                                  ),
+                                  SizedBox(width: 5),
+                                  Text(
+                                    'Tipp',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w700
+                                    ),
+                                  )
+                                ],
+                              ),
+                            )
                           ),
                         ),
-                      )
-                    ],
+                        Visibility(
+                          visible: guessStreak > 0,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 15),
+                            child: Text(
+                              'Tipp streak: $guessStreak',
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                color: Colors.orangeAccent,
+                                fontSize: 22,
+                                fontWeight: FontWeight.w800
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ],
             ),
-            GuessInputField(callback: (button){
-              if(button == -1){
-                setState(() {
-                  changeSelectedString('0');
-                  changeSelected(0);
-                });
-                return;
-              }
-              else if(button == -2){
-                setState(() {
-                  if(getSelectedString().length == 1){
-                    changeSelectedString('0');
-                    changeSelected(0);
-                    return;
-                  }
-                  changeSelectedString(getSelectedString().substring(0, getSelectedString().length - 1));
-                  setState(() {
-                    changeSelected(int.parse(getSelectedString()));
-                  });
-                });
-                return;
-              }
-
-              changeSelectedStringAdd('$button');
-              setState(() {
-                changeSelected(int.parse(getSelectedString()));
-              });
-            },),
             Visibility(
               visible: showBlur,
               child: Positioned.fill(
