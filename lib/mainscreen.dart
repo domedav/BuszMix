@@ -7,6 +7,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'emojirich_text.dart';
+
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
 
@@ -37,8 +39,10 @@ class _MainScreenState extends State<MainScreen>{
 
     Future.delayed(Duration.zero, ()async{
       final num = await getInt('guessStreak');
+      final num2 = await getInt('showBlur');
       setState(() {
         guessStreak = num ?? 0;
+        showBlur = num2 == null || num2 == 0 ? false : true;
       });
     });
   }
@@ -48,6 +52,7 @@ class _MainScreenState extends State<MainScreen>{
     setState(() {
       showBlur = true;
     });
+    saveInt('showBlur', 1);
   }
 
   void mixGuessResult(bool win){
@@ -58,6 +63,7 @@ class _MainScreenState extends State<MainScreen>{
       guessLeaves = 0;
       guessEnters = 0;
       showBlur = false;
+      saveInt('showBlur', 0);
       if(win){
         guessStreak++;
         saveInt('guessStreak', guessStreak);
@@ -136,12 +142,15 @@ class _MainScreenState extends State<MainScreen>{
                         const Center(
                           child: Padding(
                             padding: EdgeInsets.all(20),
-                            child: Text(
-                              'Tipped meg mizu lesz!',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 32,
-                                fontWeight: FontWeight.w900
+                            child: EmojiRichText(
+                              text: '🤪Tipped meg mizu lesz!🤪',
+                              defaultStyle: TextStyle(
+                                fontWeight: FontWeight.w900,
+                                fontSize: 32.0,
+                              ),
+                              emojiStyle: TextStyle(
+                                  fontSize: 32.0,
+                                  fontFamily: "Noto Color Emoji"
                               ),
                             ),
                           ),
@@ -201,13 +210,17 @@ class _MainScreenState extends State<MainScreen>{
                           visible: guessStreak > 0,
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 15),
-                            child: Text(
-                              'Tipp streak: $guessStreak',
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
+                            child: EmojiRichText(
+                              text: '🔥 Tipp streak: $guessStreak 🔥',
+                              defaultStyle: const TextStyle(
                                 color: Colors.orangeAccent,
-                                fontSize: 22,
-                                fontWeight: FontWeight.w800
+                                fontWeight: FontWeight.w800,
+                                fontSize: 22.0,
+                              ),
+                              emojiStyle: const TextStyle(
+                                  color: Colors.orangeAccent,
+                                  fontSize: 22.0,
+                                  fontFamily: "Noto Color Emoji"
                               ),
                             ),
                           ),
@@ -244,12 +257,15 @@ class _MainScreenState extends State<MainScreen>{
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Text(
-                        'Na, bejött?',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
+                      const EmojiRichText(
+                        text: '🙉 Na bejött? 🫣',
+                        defaultStyle: TextStyle(
                           fontWeight: FontWeight.w800,
-                          fontSize: 32
+                          fontSize: 32.0,
+                        ),
+                        emojiStyle: TextStyle(
+                            fontSize: 32.0,
+                            fontFamily: "Noto Color Emoji"
                         ),
                       ),
                       const SizedBox(height: 30),
@@ -261,7 +277,7 @@ class _MainScreenState extends State<MainScreen>{
                           const Icon(Icons.tips_and_updates_rounded),
                           const SizedBox(width: 8),
                           Text(
-                            'Felszáll: $guessEnters ember',
+                            'Felszállt: $guessEnters ember',
                             textAlign: TextAlign.center,
                             style: const TextStyle(
                                 fontSize: 14,
@@ -279,7 +295,7 @@ class _MainScreenState extends State<MainScreen>{
                           const Icon(Icons.tips_and_updates_rounded),
                           const SizedBox(width: 8),
                           Text(
-                            'Leszáll: $guessLeaves ember',
+                            'Leszállt: $guessLeaves ember',
                             textAlign: TextAlign.center,
                             style: const TextStyle(
                                 fontSize: 14,
@@ -307,14 +323,17 @@ class _MainScreenState extends State<MainScreen>{
                               decoration: const BoxDecoration(
                                   borderRadius: BorderRadius.all(Radius.circular(20))
                               ),
-                              child: const Text(
-                                'Nem',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w700
+                              child: const EmojiRichText(
+                                text: '🙄 Nem 🙄',
+                                defaultStyle: TextStyle(
+                                  fontWeight: FontWeight.w800,
+                                  fontSize: 16.0,
                                 ),
-                              )
+                                emojiStyle: TextStyle(
+                                    fontSize: 16.0,
+                                    fontFamily: "Noto Color Emoji"
+                                ),
+                              ),
                             )
                           ),
                           FilledButton(
@@ -330,14 +349,17 @@ class _MainScreenState extends State<MainScreen>{
                                   decoration: const BoxDecoration(
                                       borderRadius: BorderRadius.all(Radius.circular(20))
                                   ),
-                                  child: const Text(
-                                    'Igen',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w700
+                                  child: const EmojiRichText(
+                                    text: '🤩 Igen 🤩',
+                                    defaultStyle: TextStyle(
+                                      fontWeight: FontWeight.w800,
+                                      fontSize: 16.0,
                                     ),
-                                  )
+                                    emojiStyle: TextStyle(
+                                        fontSize: 16.0,
+                                        fontFamily: "Noto Color Emoji"
+                                    ),
+                                  ),
                               )
                           ),
                         ],
