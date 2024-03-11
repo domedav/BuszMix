@@ -258,7 +258,7 @@ class _MainScreenState extends State<MainScreen>{
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       const EmojiRichText(
-                        text: '🙉 Na bejött? 🫣',
+                        text: '🙉 Na bejött? 🙉',
                         defaultStyle: TextStyle(
                           fontWeight: FontWeight.w800,
                           fontSize: 32.0,
@@ -324,7 +324,7 @@ class _MainScreenState extends State<MainScreen>{
                                   borderRadius: BorderRadius.all(Radius.circular(20))
                               ),
                               child: const EmojiRichText(
-                                text: '🙄 Nem 🙄',
+                                text: 'Nem',
                                 defaultStyle: TextStyle(
                                   fontWeight: FontWeight.w800,
                                   fontSize: 16.0,
@@ -350,7 +350,7 @@ class _MainScreenState extends State<MainScreen>{
                                       borderRadius: BorderRadius.all(Radius.circular(20))
                                   ),
                                   child: const EmojiRichText(
-                                    text: '🤩 Igen 🤩',
+                                    text: 'Igen',
                                     defaultStyle: TextStyle(
                                       fontWeight: FontWeight.w800,
                                       fontSize: 16.0,
